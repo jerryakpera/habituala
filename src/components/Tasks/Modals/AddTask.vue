@@ -83,7 +83,13 @@ export default {
         milestoneID: this.milestoneID
       }
       this.createTask(newTask)
-      this.$emit("closeAddTaskDialog")
+      .then(newTask => {
+        this.$emit("addNewTask", newTask)
+        this.$emit("closeDialog")
+      })
+      .catch(err => {
+        this.$emit("closeAddTaskDialog")
+      })
     },
     clearDuedate() {
       this.newTask.dueDate = ""

@@ -21,16 +21,6 @@
         />
       </div>
     </div>
-    <!-- <notasks v-if="Object.keys(tasksTodo).length < 1" />
-    <taskstodo :tasks="tasksTodo" title="Tasks Todo" color="red" v-else />
-
-    <taskstodo
-      class="q-mt-lg"
-      :tasks="tasksCompleted"
-      title="Tasks Completed"
-      color="blue"
-      v-if="Object.keys(tasksCompleted).length > 0"
-    /> -->
 
   </q-page>
 </template>
@@ -67,7 +57,6 @@ export default {
     loading: () => import("../components/Shared/Loading.vue")
   },
   computed: {
-    ...mapGetters("tasks", ["tasksTodo", "tasksCompleted"]),
     ...mapGetters("milestones", ["milestones"])
   },
   methods: {

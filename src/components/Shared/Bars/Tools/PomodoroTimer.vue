@@ -105,10 +105,13 @@ export default {
       this.pomodoro.timer = window.setInterval(() => {
         const secondsLeft = Math.round((finish - Date.now()) / 1000)
         // Check if timer should stop
+        
+        
         if (secondsLeft < 0) {
           this.finishNotification("Nice one. Keep going!!!")
           this.stopTimer()
         }
+        
         this.displayTimer(secondsLeft)
       }, 1000)
     },

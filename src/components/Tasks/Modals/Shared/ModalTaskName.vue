@@ -9,13 +9,6 @@
     autofocus
     @input="$emit('update:name', $event)"
   >
-    <template v-if="name" v-slot:append>
-      <q-icon 
-        name="cancel" 
-        @click.stop="$emit('update:name', '')"
-        class="cursor-pointer" 
-      />
-    </template>
   </q-input>
 </template>
 
@@ -23,8 +16,7 @@
 export default {
   props: {
     name: {
-      type: String,
-      required: true
+      type: String
     }
   }
 }

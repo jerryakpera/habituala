@@ -12,16 +12,16 @@ if (_.storage.get("habitualaUserData")) {
 
 const state = {
   milestones: {},
-  tasks: []
+  userTasks: [],
 }
 
 const getters = {
   milestones: () => state.milestones,
-  tasks: () => state.tasks
+  userTasks: () => state.userTasks
 }
 
 const actions = {
-  createTask({commit}, task) {
+  createTask({}, task) {
     return new Promise((resolve, reject) => {
       let body = {
         query: `
@@ -49,16 +49,14 @@ const actions = {
       
       graphqlAxios.post("/graphql", body, options)
       .then(res => {
-        commit("addTask", {task: res.data.data.createTask, milestoneID: task.milestoneID})
-        // commit("addMilestone", res.data.data.createTask)
-        // resolve(res.data.data.createMilestone)
+        resolve(res.data.data.createTask)
       })
       .catch(err => {
         reject(err)
       })
     })
   },
-  addMilestone({commit}, milestone) {
+  addMilestone({}, milestone) {
     return new Promise((resolve, reject) => {
       
       let body = {
@@ -90,7 +88,7 @@ const actions = {
       })
     })
   },
-  deleteMilestone({commit}, milestoneID) {
+  deleteMilestone({}, milestoneID) {
     return new Promise((resolve, reject) => {
       let body = {
         query: `
@@ -105,9 +103,65 @@ const actions = {
       
       graphqlAxios.post("/graphql", body, options)
       .then(res => {
-        commit("removeMilestone", milestoneID)
-        // commit("addMilestone", res.data.data.createMilestone)
-        // resolve(res.data.data.createMilestone)
+        resolve()
+      })
+      .catch(err => {
+        reject(err)
+      })
+    })
+  },
+  deleteTask({}, deleteTask) {
+    return new Promise((resolve, reject) => {
+      let body = {
+        query: `
+          mutation {
+            deleteTask(deleteTaskInput: {
+              milestoneID: "${deleteTask.milestoneID}",
+              taskID: "${deleteTask.taskID}"
+            })
+          }
+        `,
+        variables: {}
+      }
+      
+      graphqlAxios.post("/graphql", body, options)
+      .then(res => {
+        resolve()
+      })
+      .catch(err => {
+        reject(err)
+      })
+    })
+  },
+  updateTask({}, task) {
+    return new Promise((resolve, reject) => {
+      let body = {
+        query: `
+          mutation {
+            editTask(editTaskInput: {
+              _id: "${task._id}",
+              name: "${task.name}",
+              completed: ${task.completed},
+              dueTime: "${task.dueTime}",
+              dueDate: "${task.dueDate}",
+              user: "${habitualaUserData.userID}"
+            }) {
+              _id
+              name
+              completed
+              dueTime
+              dueDate
+              createdAt
+              updatedAt
+            }
+          }
+        `,
+        variables: {}
+      }
+      
+      graphqlAxios.post("/graphql", body, options)
+      .then(res => {
+        resolve(res.data.data.editTask)
       })
       .catch(err => {
         reject(err)
@@ -133,6 +187,7 @@ const actions = {
                 completed
                 dueTime
                 dueDate
+                remainingDays
                 createdAt
                 updatedAt
               }
@@ -153,16 +208,27 @@ const actions = {
         reject(err)
       })
     })
-  },
+  }
 }
 
 const mutations = {
   setMilestones(state, milestones) {
+    const userTasks = []
+    milestones.forEach(milestone => {
+      milestone.tasks.forEach(task => {
+        if (task.remainingDays <= 3) {
+          task.milestoneID = milestone._id
+          userTasks.push(task)
+        }
+      })
+    })
+    state.userTasks = userTasks
     const returnedMilestones = {
       0: [],
       1: [],
       2: []
     }
+    
     milestones.forEach(milestone => {
       if (milestone.group === 0) returnedMilestones[0].push(milestone)
       if (milestone.group === 1) returnedMilestones[1].push(milestone)
@@ -170,18 +236,6 @@ const mutations = {
     })
     
     Object.assign(state.milestones, returnedMilestones)
-  },
-  // addTask(state, payload) {
-  //   state.milestones.find(milestone => {
-  //     milestone._id === payload.milestoneID
-  //   }).tasks.push(payload.tasks)
-  // },
-  removeMilestone(state, milestoneID) {
-    const index = state.milestones.findIndex(milestone => {
-      return milestone._id === milestoneID
-    })
-
-    state.milestones.splice(index, 1)
   }
 }
 

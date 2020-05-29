@@ -30,9 +30,14 @@ const formatDate = (datestring) => {
   console.log(moment(datestring))
 }
 
+function getTimeDifference(date) {
+  console.log(0, date)
+}
+
 module.exports = {
   encryptObject,
   decryptObject,
   storage,
-  formatDate
+  formatDate,
+  getTimeDifference,
 }

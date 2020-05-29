@@ -59,7 +59,7 @@ export default {
     modalbuttons: () => import("./Shared/ModalButtons")
   },
   methods: {
-    ...mapActions("tasks", ["updateTask"]),
+    ...mapActions("milestones", ["updateTask"]),
     submitForm() {
       this.$refs.modalTaskName.$refs.name.validate()
 
@@ -68,9 +68,21 @@ export default {
       }
     },
     submitTask() {
-      this.updateTask({
-        id: this.id,
-        updates: this.newTask
+      const taskToEdit = {
+        _id: this.newTask._id,
+        name: this.newTask.name,
+        completed: this.newTask.completed,
+        user: this.newTask.user,
+        dueDate: this.newTask.dueDate,
+        dueTime: this.newTask.dueTime
+      }
+
+      this.updateTask(taskToEdit)
+      .then(editedTask => {
+        this.$root.$emit("refreshTask", editedTask)
+      })
+      .catch(err => {
+        console.log(err)
       })
       this.$emit("closeAddTaskDialog")
     },

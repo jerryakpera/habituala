@@ -10,13 +10,18 @@ if (_.storage.get("habitualaUserData")) {
   }
 }
 
-
 const state = {
-  userRetrospects: []
+  userRetrospects: [],
+  homeBoard: {},
+  vocabGame: {
+    words: {}
+  }
 }
 
 const getters = {
-  userRetrospects: () => state.userRetrospects
+  userRetrospects: () => state.userRetrospects,
+  homeBoard: () => state.homeBoard,
+  vocabGame: () => state.vocabGame
 }
 
 const actions = {
@@ -289,12 +294,101 @@ const actions = {
       })
     })
   },
+  fetchHomeBoard({commit}) {
+    return new Promise((resolve, reject) => {
+      let body = {
+        query: `
+          query {
+            fetchHomeBoard(fetchHomeBoardInput: {
+              user: "${habitualaUserData.userID}"
+            }) {
+              _id
+              journal
+              progress {
+                one
+                two
+                three
+              }
+              goodthings {
+                one
+                two
+                three
+              }
+              title
+              displayDate
+            }
+          }
+        `,
+        variables: {}
+      }
+
+      graphqlAxios.post("/graphql", body, options)
+      .then(res => {
+        commit("setHomeBoard", res.data.data.fetchHomeBoard)
+        resolve()
+      })
+      .catch(err => {
+        reject(err)
+      })
+    })
+  },
+  fetchUserWords({commit}) {
+    return new Promise((resolve, reject) => {
+      let body = {
+        query: `
+          query {
+            fetchUserWords(fetchUserWordsInput: {
+              user: "${habitualaUserData.userID}"
+            }) {
+              _id
+              word
+              definition
+              createdAt
+              updatedAt
+            }
+          }
+        `,
+        variables: {}
+      }
+
+      graphqlAxios.post("/graphql", body, options)
+      .then(res => {
+        commit("setUserWords", res.data.data.fetchUserWords)
+        resolve()
+      })
+      .catch(err => {
+        reject(err)
+      })
+    })
+  },
 }
 
 const mutations = {
   setUserRetrospects(state, userRetrospects) {
     Object.assign(state.userRetrospects, userRetrospects)
-  }
+  },
+  setHomeBoard(state, homeBoard) {
+    Object.assign(state.homeBoard, homeBoard)
+  },
+  setUserWords(state, userWords) {
+    const vocabGame = {
+      lives: 3,
+      score: 0,
+      words: []
+    }
+
+    userWords.forEach((word, i) => {
+      const vocabWord = {
+        flag: 0,
+        word: word.word,
+        definition: word.definition
+      }
+      
+      vocabGame.words.push(vocabWord)
+    })
+
+    Object.assign(state.vocabGame, vocabGame)
+  },
 }
 
 export default {
