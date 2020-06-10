@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <tabs />
+    <retrospecttabs />
   </q-page>
 </template>
 
@@ -43,7 +43,7 @@ export default {
   components: {
     loading: () => import("../components/Shared/Loading"),
     snackbar: () => import("../components/Shared/Snackbar"),
-    tabs: () => import("../components/Retrospect/Tabs")
+    retrospecttabs: () => import("../components/Retrospect/Tabs")
   },
   methods: {
     ...mapActions("retrospect", ["addJournal", "addWord", "addQuote", "addProgress", "addBadThings", "addGoodThings", "addRetrospect"]),

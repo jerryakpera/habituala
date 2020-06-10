@@ -83,14 +83,17 @@ export default {
       if(!this.pomodoro.timer == "") window.clearInterval(this.pomodoro.timer)
     },
     resetToWork() {
+      this.phase = "work"
       this.pomodoro.secondsLeft = this.pomodoro.duration.work
       this.displayTimer(this.pomodoro.duration.work)
     },
     resetToRest() {
+      this.phase = "break"
       this.pomodoro.secondsLeft = this.pomodoro.duration.rest
       this.displayTimer(this.pomodoro.duration.rest)
     },
     resetToLongRest() {
+      this.phase = "rest"
       this.pomodoro.secondsLeft = this.pomodoro.duration.longRest
       this.displayTimer(this.pomodoro.duration.longRest)
     },
@@ -107,9 +110,20 @@ export default {
         // Check if timer should stop
         
         
-        if (secondsLeft < 0) {
-          this.finishNotification("Nice one. Keep going!!!")
-          this.stopTimer()
+        if (secondsLeft <= 0) {
+          if (this.phase === "work") {
+            this.showNotif("positive", "Great work! Take a break", "thumb_alt_up")
+            this.stopTimer()
+            return
+          } else if (this.phase === "break") {
+            this.showNotif("positive", "Back to work!", "thumb_alt_up")
+            this.stopTimer()
+            return
+          } else {
+            this.showNotif("positive", "Back to work!", "thumb_alt_up")
+            this.stopTimer()
+            return
+          }
         }
         
         this.displayTimer(secondsLeft)
@@ -119,6 +133,14 @@ export default {
       this.pomodoro.minutes = Math.floor(seconds / 60)
       this.pomodoro.seconds = seconds % 60 == 0 ? "00" : seconds % 60
     },
+    showNotif (type, message, icon) {
+      const snackbar = {
+        type,
+        message,
+        icon
+      }
+      this.$q.notify(snackbar)
+    }
   },
   mounted() {
     this.resetToWork()

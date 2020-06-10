@@ -4,10 +4,22 @@
     flat
     style="width: 300px"
   >
-    <q-card-section>
-      <div class="text-h4">
-        Add Vocab
-      </div>
+    <q-card-section horizontal>
+      <q-card-section class="col-7">
+        <div class="text-h6">
+          VocabBuilder
+        </div>
+      </q-card-section>
+      <q-card-section align="right">
+        <q-btn 
+          size="sm" 
+          outline 
+          rounded 
+          color="primary" 
+          label="View Words"
+          to="/vocab"
+        />
+      </q-card-section>
     </q-card-section>
     <q-separator />
     <div

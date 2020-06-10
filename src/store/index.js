@@ -5,6 +5,7 @@ import Vuex from 'vuex'
 import auth from './modules/authentication/'
 import retrospect from './modules/retrospect/'
 import milestones from './modules/tasks/'
+import journal from './modules/journal/'
 
 Vue.use(Vuex)
 
@@ -23,6 +24,7 @@ export default function (/* { ssrContext } */) {
       // tasks,
       auth,
       retrospect,
+      journal,
       milestones
     },
 

@@ -22,6 +22,13 @@ const routes = [
         }
       },
       { 
+        path: '/vocab', 
+        component: () => import('pages/PageVocab.vue') ,
+        meta: {
+          requiresAuth: true
+        }
+      },
+      { 
         path: '/settings', 
         component: () => import('pages/PageSettings.vue'),
         meta: {
@@ -31,6 +38,13 @@ const routes = [
       { 
         path: '/retrosect', 
         component: () => import('pages/PageRetrosect.vue'),
+        meta: {
+          requiresAuth: true
+        }
+      },
+      { 
+        path: '/journal', 
+        component: () => import('pages/PageJournal.vue'),
         meta: {
           requiresAuth: true
         }

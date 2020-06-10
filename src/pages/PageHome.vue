@@ -14,14 +14,28 @@
             bordered
             square  
           >
-            <q-card-section>
+            <q-card-section horizontal v-if="!homeBoard.title">
+              <q-card-section class="col-2">
+                <q-icon 
+                  color="primary" 
+                  name="trending_up" 
+                />
+              </q-card-section>
+              <q-card-section>
+                <div class="text-h6 q-mt-none">Your day</div>
+                <div class="text-caption text-primary">Do the necessary!</div>
+              </q-card-section>
+            </q-card-section>
+            <q-card-section v-if="homeBoard.title">
               <div class="text-h6 q-mt-none">{{homeBoard.title}}</div>
               <div class="text-caption text-primary">{{homeBoard.displayDate}}</div>
             </q-card-section>
 
-            <q-separator inset />
+            <q-separator v-if="homeBoard.title" inset />
 
-            <q-card-section class="q-mt-none">
+            <q-card-section 
+              v-if="homeBoard.title" 
+              class="q-mt-none">
               {{ homeBoard.journal }}
             </q-card-section>
           </q-card>
@@ -45,7 +59,7 @@
               </q-card-section>
             </q-card-section>
 
-            <q-separator inset />
+            <q-separator v-if="homeBoard.progress" inset />
 
             <q-card-section 
               class="q-mt-none"
@@ -85,7 +99,7 @@
                     <q-item-label 
                       class="text-body1"
                     >
-                      {{homeBoard.progress.one}}
+                      {{homeBoard.progress.three}}
                     </q-item-label>
                   </q-item-section>
                 </q-item>
@@ -112,7 +126,7 @@
               </q-card-section>
             </q-card-section>
 
-            <q-separator inset />
+            <q-separator v-if="homeBoard.goodthings" inset />
 
             <q-card-section 
               class="q-mt-none"
@@ -161,41 +175,7 @@
           </q-card>
         </div>
       </div>
-      <div class="row">
-        <div class="col-4 q-pa-xs">
-          <q-card flat square bordered class="my-card">
-            <q-card-section horizontal>
-              <q-card-section class="col-9">
-                <div class="text-h6">word</div>
-              </q-card-section>
-              <q-card-section>
-                <q-btn 
-                  unelevated
-                  round
-                  color="red" 
-                  icon="play_arrow" 
-                  size="sm"
-                  @click="openVocabGame"
-                />
-              </q-card-section>
-            </q-card-section>
-            <q-separator />
-            <q-card-section>
-              definition - dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-              tempor incididunt ut labore et dolore magna aliqua.
-            </q-card-section>
-          </q-card>
-        </div>
-        <div class="col-4">
-          {{homeBoard}}
-        </div>
-      </div>
     </div>
-    <q-dialog v-model="showVocabDialog">
-      <vocabgame 
-        :game="vocabGame"
-      />
-    </q-dialog>
   </q-page>
 </template>
 
@@ -205,11 +185,11 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   data: () => ({
     loading: false,
-    showVocabDialog: false
+    showVocabDialog: false,
+    dataReady: false
   }),
   components: {
-    loading: () => import("../components/Shared/Loading"),
-    vocabgame: () => import("../components/Vocab/VocabGame")
+    loading: () => import("../components/Shared/Loading")
   },
   computed: {
     ...mapGetters("auth", ["user"]),
@@ -221,19 +201,19 @@ export default {
       this.loading = true
       this.fetchHomeBoard()
       .then(() => {
-        this.loading = false
+        this.fetchUserWords()
+        .then(() => {
+          this.dataReady = true
+          this.loading = false
+        })
+        .catch(err => {
+          console.log(0, err)
+          this.loading = false
+        })
       })
       .catch(err => {
+        console.log(1, err)
         this.loading = false
-      })
-    },
-    openVocabGame() {
-      this.fetchUserWords()
-      .then(() => {
-        this.showVocabDialog = true
-      })
-      .catch(err => {
-        console.log(err)
       })
     }
   },

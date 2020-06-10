@@ -3,7 +3,10 @@
     style="width: 300px"
     class="my-card bg-dark text-white"
   >
-    <q-card-section horizontal>
+    <q-card-section 
+      horizontal
+      v-if="!gameOver"
+    >
       <q-card-section class="col-9">
         Score: {{score}}
       </q-card-section>
@@ -19,16 +22,22 @@
     <q-separator 
       inset 
       class="text-white" 
-      dark 
+      dark
+      v-if="!gameOver"
     />
-    <q-card-section>
+    <q-card-section
+      v-if="!gameOver"
+    >
       <div 
-        class="text-h3 text-center"
+        class="text-h6 text-center"
+        v-if="gameWords[0]"
       >
-        {{currentWord.word}}
+        {{gameWords[wordIndex].word}}
       </div>
     </q-card-section>
-    <q-card-section>
+    <q-card-section
+      v-if="!gameOver"
+    >
       <div 
         v-if="!showingDefinition"
         class="text-h6 text-center"
@@ -36,16 +45,28 @@
         ??
       </div>
       <div 
-        v-if="showingDefinition"
+        v-if="showingDefinition && gameWords[0]"
         class="text-h6 text-center"
       >
-        {{currentWord.definition}}
+        {{gameWords[wordIndex].definition}}
+      </div>
+    </q-card-section>
+    <q-card-section v-if="gameOver">
+      <div class="text-h4 text-center">
+        Game Over
+      </div>
+      <div class="text-h4 text-center">
+        Score: {{score}}
+      </div>
+      <div class="text-h4 text-center">
+        Longest streak: {{longestStreak}}
       </div>
     </q-card-section>
 
     <q-card-actions
       align="center"
       class="q-mb-sm"
+       v-if="!gameOver"
     >
       <q-btn 
         v-if="!showingDefinition"
@@ -80,16 +101,15 @@
 <script>
 export default {
   data: () => ({
+    gameOver: false,
     showingDefinition: false,
-    currentWord: {
-      flag: 0,
-      word: "",
-      definition: ""
-    },
     score: 0,
     lives: 3,
     wordIndex: 0,
-    gameWords: []
+    gameWords: [],
+    gameScore: [],
+    longestStreak: 0,
+    currentStreak: 0
   }),
   props: {
     game: {
@@ -99,33 +119,60 @@ export default {
   },
   methods: {
     startGame() {
-      this.currentWord = this.gameWords[this.wordIndex]
+      this.gameWords = this.gameWords.filter(word => {
+        if (word.flag === 0) return word
+      })
+
+      this.wordIndex = 0
+      return
+    },
+    endGame() {
+      if(this.gameWords.filter(word => !word.flag).length > 0) {
+        this.showingDefinition = false
+        this.startGame()
+        return
+      }
+      
+      this.gameOver = true
     },
     showDefinition() {
       this.showingDefinition = true
     },
     nextWord() {
+      if(this.gameWords.length === this.wordIndex + 1) {
+        this.endGame()
+        return
+      }
+
       this.showingDefinition = false
-      this.wordIndex ++
-      
-      this.currentWord = this.gameWords[this.wordIndex]
+      this.wordIndex++
     },
     correct() {
       this.score ++
-      this.currentWord.flag = 1
-      this.gameWords.push(this.currentWords)
+      this.currentStreak ++
+      if (this.currentStreak > this.longestStreak) {
+        this.longestStreak ++
+      }
+
+      this.gameWords[this.wordIndex].flag = 1
       this.nextWord()
     },
     wrong() {
       if (this.score > 0) {
         this.score --
       }
-      this.gameWords.push(this.currentWords)
+
+      this.currentStreak = 0
       this.nextWord()
     },
   },
   mounted() {
-    this.gameWords = [ ...this.game.words ]
+    this.game.words.forEach(word => {
+      this.gameWords.push({
+        flag: 0,
+        ...word
+      })
+    })
     this.startGame()
   }
 }

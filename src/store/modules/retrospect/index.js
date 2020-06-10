@@ -15,13 +15,17 @@ const state = {
   homeBoard: {},
   vocabGame: {
     words: {}
-  }
+  },
+  words: [],
+  userWords: []
 }
 
 const getters = {
   userRetrospects: () => state.userRetrospects,
   homeBoard: () => state.homeBoard,
-  vocabGame: () => state.vocabGame
+  vocabGame: () => state.vocabGame,
+  words: () => state.words,
+  userWords: () => state.userWords
 }
 
 const actions = {
@@ -78,12 +82,79 @@ const actions = {
       }
       graphqlAxios.post("/graphql", body, options)
       .then(res => {
-        resolve(res.data.data.createWord)
+        commit("addVocabToUser", res.data.data.createWord)
+        commit("addVocab", res.data.data.createWord)
+        resolve()
       })
       .catch(err => {
         reject(err)
       })
     })
+  },
+  addVocabToUserList({commit}, vocabID) {
+    return new Promise((resolve, reject) => {
+      let body = {
+        query: `
+          mutation {
+            addVocabToUser(userVocabInput: {
+              vocab: "${vocabID}",
+              user: "${habitualaUserData.userID}"
+            }) {
+              _id
+              word
+              definition
+              createdAt
+              updatedAt
+            }
+          }
+        `,
+        variables: {}
+      }
+      graphqlAxios.post("/graphql", body, options)
+      .then(res => {
+        commit("addVocabToUser", res.data.data.addVocabToUser)
+
+        resolve(res.data.data.addVocabToUser)
+      })
+      .catch(err => {
+        console.log(err)
+        reject(err)
+      })
+    })
+  },
+  removeVocabFromUser({commit}, vocabID) {
+    return new Promise((resolve, reject) => {
+      let body = {
+        query: `
+          mutation {
+            removeVocabFromUser(userVocabInput: {
+              vocab: "${vocabID}",
+              user: "${habitualaUserData.userID}"
+            }) {
+              _id
+              word
+              definition
+              createdAt
+              updatedAt
+            }
+          }
+        `,
+        variables: {}
+      }
+      graphqlAxios.post("/graphql", body, options)
+      .then(res => {
+        commit("removeVocabFromUser", res.data.data.removeVocabFromUser)
+
+        resolve(res.data.data.addVocabToUser)
+      })
+      .catch(err => {
+        console.log(err)
+        reject(err)
+      })
+    })
+  },
+  filterWords({commit}, search) {
+    commit("filterWords", search)
   },
   addQuote({commit}, quote) {
     return new Promise((resolve, reject) => {
@@ -221,7 +292,6 @@ const actions = {
               badthings: "${retrospect.badthings}",
               progress: "${retrospect.progress}",
               quote: "${retrospect.quote}",
-              word: "${retrospect.word}",
               user: "${habitualaUserData.userID}"
             }) {
               _id
@@ -272,10 +342,6 @@ const actions = {
               quote {
                 author
                 text
-              }
-              word {
-                word
-                definition
               }
               displayDate
             }
@@ -361,6 +427,33 @@ const actions = {
       })
     })
   },
+  fetchWords({commit}) {
+    return new Promise((resolve, reject) => {
+      let body = {
+        query: `
+          query {
+            fetchWords {
+              _id
+              word
+              definition
+              createdAt
+              updatedAt
+            }
+          }
+        `,
+        variables: {}
+      }
+
+      graphqlAxios.post("/graphql", body, options)
+      .then(res => {
+        commit("setWords", res.data.data.fetchWords)
+        resolve()
+      })
+      .catch(err => {
+        reject(err)
+      })
+    })
+  }
 }
 
 const mutations = {
@@ -371,6 +464,8 @@ const mutations = {
     Object.assign(state.homeBoard, homeBoard)
   },
   setUserWords(state, userWords) {
+    if(!userWords) return
+    state.userWords = userWords
     const vocabGame = {
       lives: 3,
       score: 0,
@@ -389,6 +484,27 @@ const mutations = {
 
     Object.assign(state.vocabGame, vocabGame)
   },
+  setWords(state, words) {
+    state.words = words
+  },
+  addVocabToUser(state, vocab) {
+    state.userWords.push(vocab)
+  },
+  removeVocabFromUser(state, removedVocab) {
+    const index = state.userWords.findIndex(vocab => vocab._id == removedVocab._id)
+
+    state.userWords.splice(index, 1)
+  },
+  addVocab(state, vocab) {
+    state.words.push(vocab)
+  },
+  filterWords(state, search) {
+    state.words = state.words.filter(vocab => {
+      if(vocab.word.includes(search) || vocab.definition.includes(search)) {
+        return vocab
+      }
+    })
+  }
 }
 
 export default {

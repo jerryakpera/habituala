@@ -1,7 +1,6 @@
 <template>
   <q-card
     flat
-    bordered
     square
   >
     <q-toolbar 
@@ -27,6 +26,7 @@
       :key="key"
       :milestone="milestone"
       :color="group.color"
+      class="q-pa-xs"
     />
     
     <q-dialog v-model="showAddMilestone">

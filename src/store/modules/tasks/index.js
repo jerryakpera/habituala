@@ -110,6 +110,48 @@ const actions = {
       })
     })
   },
+  editMilestone({}, milestone) {
+    return new Promise((resolve, reject) => {
+      let body = {
+        query: `
+          mutation {
+            editMilestone(editMilestoneInput: {
+              milestoneID: "${milestone.milestoneID}",
+              name: "${milestone.name}",
+              group: ${milestone.group}
+            }) {
+              _id
+              user
+              name
+              group
+              tasks {
+                _id
+                name
+                user
+                completed
+                dueTime
+                dueDate
+                remainingDays
+                createdAt
+                updatedAt
+              }
+              createdAt
+              updatedAt
+            }
+          }
+        `,
+        variables: {}
+      }
+      
+      graphqlAxios.post("/graphql", body, options)
+      .then(res => {
+        resolve(res.data.data.editMilestone)
+      })
+      .catch(err => {
+        reject(err)
+      })
+    })
+  },
   deleteTask({}, deleteTask) {
     return new Promise((resolve, reject) => {
       let body = {
@@ -208,6 +250,9 @@ const actions = {
         reject(err)
       })
     })
+  },
+  changeMilestoneGroup({commit}, milestone) {
+    commit("changeMilestoneGroup", milestone)
   }
 }
 
@@ -236,6 +281,12 @@ const mutations = {
     })
     
     Object.assign(state.milestones, returnedMilestones)
+  },
+  changeMilestoneGroup(state, milestone) {
+    const index = state.milestones[milestone.oldGroup].findIndex(m => m._id == milestone.milestone._id)
+
+    state.milestones[milestone.oldGroup].splice(index, 1)
+    state.milestone[milestone.milestone.group].push(milestone.milestone)
   }
 }
 

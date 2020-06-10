@@ -63,10 +63,20 @@ export default {
         icon: 'list',
         link: '/tasks'
       },
+      // {
+      //   title: 'VocabBuilder',
+      //   icon: 'build',
+      //   link: '/vocab'
+      // },
+      // {
+      //   title: 'Retro Sect',
+      //   icon: 'search',
+      //   link: '/retrosect'
+      // },
       {
-        title: 'Retro Sect',
-        icon: 'search',
-        link: '/retrosect'
+        title: 'Journal',
+        icon: 'notes',
+        link: '/journal'
       },
       {
         title: 'Settings',
