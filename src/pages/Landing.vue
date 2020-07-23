@@ -5,7 +5,7 @@
       flat
     >
       <q-card-section horizontal>
-        <q-card-section class="col-6">
+        <q-card-section class="col-12 col-sm-6 col-md-6">
           <div class="text-h2">Welcome to <span class="text-primary">HABITUAL</span></div>
 
           <q-separator 
