@@ -1,5 +1,5 @@
 <template>
-  <div class="fit row wrap justify-center items-center content-center">
+  <q-card-section class="col-12 col-sm-6 col-md-6">
     <div class="formBox">
       <loading v-if="loading" />
       <form 
@@ -49,8 +49,7 @@
       </form>
 
     </div>
-    
-  </div>
+  </q-card-section>
 </template>
 
 <script>
@@ -110,6 +109,8 @@ export default {
 
 <style lang="scss" scoped>
   .formBox {
-    margin-top: 100px;
+    // margin-top: 100px;
+    border: 2px solid #EFEFEF;
+    border-radius: 5px;
   }
 </style>

@@ -1,11 +1,11 @@
 <template>
-  <div class="absolute-center">
+  <div class="flex flex-center">
    <q-card
       class="my-card"
       flat
     >
-      <q-card-section horizontal>
-        <q-card-section class="col-12 col-sm-6 col-md-6">
+      <div class="row q-ma-lg">
+        <div class="col-12 col-sm-6 col-md-6">
           <div class="text-h2">Welcome to <span class="text-primary">HABITUAL</span></div>
 
           <q-separator 
@@ -20,12 +20,6 @@
             <p>
               Note down your dreams and thoughts, and keep track of your progress and improvements
             </p>
-            <p>
-              Improve your vocabulary with the VocabBuilder
-            </p>
-            <p>
-              Learn new habits and get rid of bad ones with 
-            </p>
           </div>
           <q-btn 
             @click="showSignupForm = true"
@@ -33,12 +27,10 @@
             color="secondary" 
             label="Get started" 
           />
-        </q-card-section>
-
-        <q-separator vertical />
+        </div>
 
         <login />
-      </q-card-section>
+      </div>
     </q-card>
     <q-dialog v-model="showLoginForm">
       <loginform 
