@@ -62,8 +62,6 @@ const actions = {
 
           const data = _.encryptObject(userData)
           _.storage.save("habitualaUserData", data)
-
-          console.log(res.data.data)
           
           commit("login", {
             data: {

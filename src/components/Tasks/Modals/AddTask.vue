@@ -85,7 +85,9 @@ export default {
       this.createTask(newTask)
       .then(newTask => {
         this.$emit("addNewTask", newTask)
-        this.$emit("closeDialog")
+        this.newTask.name = " "
+        this.$refs.modalTaskName.$refs.name.focus()
+        // this.$emit("closeDialog")
       })
       .catch(err => {
         this.$emit("closeAddTaskDialog")

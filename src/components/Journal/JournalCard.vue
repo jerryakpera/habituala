@@ -1,5 +1,5 @@
 <template>
-  <div class="col-4 q-pa-xs">
+  <div class="col-12 col-md-4 q-pa-xs">
     <q-card 
       class="my-card cursor-pointer"
       :class="'bg-' + journal.color + '-10'"

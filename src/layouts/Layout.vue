@@ -74,9 +74,9 @@ export default {
       //   link: '/retrosect'
       // },
       {
-        title: 'Journal',
+        title: 'Journals',
         icon: 'notes',
-        link: '/journal'
+        link: '/journals'
       },
       {
         title: 'Settings',

@@ -43,8 +43,15 @@ const routes = [
         }
       },
       { 
-        path: '/journal', 
+        path: '/journals', 
         component: () => import('pages/PageJournal.vue'),
+        meta: {
+          requiresAuth: true
+        }
+      },
+      { 
+        path: '/profile', 
+        component: () => import('pages/PageProfile.vue'),
         meta: {
           requiresAuth: true
         }

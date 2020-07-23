@@ -4,7 +4,7 @@
       @submit.prevent="submitForm"
     >
       <div class="row">
-        <div class="col-6 q-pa-lg">
+        <div class="col-12 col-md-6 q-pa-sm">
           <q-input 
             color="dark" 
             v-model="reflectionJournal.title" 
@@ -23,18 +23,18 @@
             </template>
           </q-input>
         </div>
-        <div class="col-2 q-pa-lg">
+        <div class="col-12 col-md-2 q-pa-sm">
           <span>Give it a rating</span>
           <div class="q-mb-md">
             <q-rating
               v-model="reflectionJournal.rating"
               size="1.5em"
               :max="5"
-              color="secondary"
+              color="yellow"
             />
           </div>
         </div>
-        <div class="col-4 q-pa-lg">
+        <div class="col-12 col-md-4 q-pa-sm">
           <q-input 
             color="purple-12" 
             v-model="reflectionJournal.date" 
@@ -52,7 +52,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-6 q-pa-lg">
+        <div class="col-12 col-md-6 q-pa-sm">
           <q-input 
             color="purple-12"
             square
@@ -64,7 +64,7 @@
             ref="goodthings"
           />
         </div>
-        <div class="col-6 q-pa-lg">
+        <div class="col-12 col-md-6 q-pa-sm">
           <q-input 
             color="purple-12"
             square
@@ -78,7 +78,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col q-pa-lg">
+        <div class="col q-pa-sm">
           <q-input 
             color="purple-12" 
             v-model="reflectionJournal.entry" 
@@ -93,7 +93,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col q-pa-lg">
+        <div class="col q-pa-sm">
           <q-btn 
             color="green-10" 
             label="Save"
@@ -128,7 +128,7 @@ export default {
     }
   }),
   methods: {
-    ...mapActions("journal", ["addNewReflectionJournal"]),
+    ...mapActions("journal", ["addNewJournal"]),
     closeThisDialog() {
       this.$emit("closeDialog")
     },
@@ -152,8 +152,9 @@ export default {
         entry: this.reflectionJournal.entry,
       }
 
-      this.addNewReflectionJournal(newJournal)
+      this.addNewJournal(newJournal)
       .then(response => {
+        this.$root.$emit("newJournalAdded", newJournal.type)
         this.closeThisDialog()
       })
       .catch(err => {

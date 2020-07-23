@@ -13,11 +13,12 @@
       <div
         v-for="group in groups"
         :key="group.group"
-        class="col-4 q-pa-sm"
+        class="col-12 col-md-4 q-pa-sm"
       >
         <group 
           :group="group"
           :milestones="milestones[group.group]"
+          style="width: 100%"
         />
       </div>
     </div>
@@ -72,14 +73,14 @@ export default {
       })
     }
   },
-  mounted() {
+  created() {
+    this.getMilestones()
     this.$root.$on("addNewTask", () => {
       this.showAddTask = true;
     });
     this.$root.$on("fetchMilestones", () => {
       this.getMilestones()
     });
-    this.getMilestones()
   }
 };
 </script>

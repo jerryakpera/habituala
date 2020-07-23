@@ -2,6 +2,7 @@
   <q-card
     flat
     square
+    bordered
   >
     <q-toolbar 
       :class="'bg-' + group.color + '-10'"

@@ -4,7 +4,7 @@
       @submit.prevent="submitForm"
     >
       <div class="row">
-        <div class="col-6 q-pa-lg">
+        <div class="col-12 col-md-6 q-pa-sm">
           <q-input 
             color="dark" 
             v-model="openJournal.title" 
@@ -23,7 +23,7 @@
             </template>
           </q-input>
         </div>
-        <div class="col-6 q-pa-lg">
+        <div class="col-12 col-md-6 q-pa-sm">
           <q-input 
             color="purple-12" 
             v-model="openJournal.date" 
@@ -41,7 +41,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col q-pa-lg">
+        <div class="col q-pa-sm">
           <q-input 
             color="purple-12" 
             v-model="openJournal.entry" 
@@ -63,7 +63,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col q-pa-lg">
+        <div class="col q-pa-sm">
           <q-btn 
             color="green-10" 
             label="Save"
@@ -95,7 +95,7 @@ export default {
     }
   }),
   methods: {
-    ...mapActions("journal", ["addNewOpenJournal"]),
+    ...mapActions("journal", ["addNewJournal"]),
     closeThisDialog() {
       this.$emit("closeDialog")
     },
@@ -114,8 +114,9 @@ export default {
         type: "open"
       }
 
-      this.addNewOpenJournal(newJournal)
+      this.addNewJournal(newJournal)
       .then(response => {
+        this.$root.$emit("newJournalAdded", newJournal.type)
         this.closeThisDialog()
       })
       .catch(err => {

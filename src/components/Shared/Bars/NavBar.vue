@@ -28,11 +28,12 @@
         <q-item-label 
           header
         >
-          User
+          {{user.data.username}}
         </q-item-label>
         <q-item 
           clickable
           tabindex="0"
+          to="/profile"
         >
           <q-item-section avatar>
             <q-avatar 
@@ -87,9 +88,12 @@
   </q-toolbar>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
+  computed: {
+    ...mapGetters("auth", ["user"])
+  },
   methods: {
     ...mapActions("auth", ["logout"]),
     logUserout() {

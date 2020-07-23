@@ -12,7 +12,6 @@
           class="text-teal"
           shrink
         >
-          <q-tab name="mails" label="General" />
           <q-tab name="account" label="Account" />
         </q-tabs>
       </template>
@@ -26,12 +25,6 @@
           transition-prev="jump-up"
           transition-next="jump-up"
         >
-          <q-tab-panel name="mails">
-            <div class="text-h4 q-mb-md">Mails</div>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</p>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis praesentium cumque magnam odio iure quidem, quod illum numquam possimus obcaecati commodi minima assumenda consectetur culpa fuga nulla ullam. In, libero.</p>
-          </q-tab-panel>
-
           <q-tab-panel name="account">
             <!-- <div class="text-h4 q-mb-md">Account Settings</div> -->
             <accountsettings />
@@ -47,7 +40,7 @@
 <script>
 export default {
   data: () => ({
-    tab: 'mails',
+    tab: 'account',
     splitterModel: 20
   }),
   components: {

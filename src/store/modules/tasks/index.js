@@ -1,15 +1,6 @@
 const graphqlAxios = require("../../../services/axios/graphqlAxios").graphqlAxios
 const _ = require("../../../services/utils/utils")
 
-let habitualaUserData = ""
-let options = {}
-if (_.storage.get("habitualaUserData")) {
-  habitualaUserData = _.decryptObject(_.storage.get("habitualaUserData"))
-  options.headers = {
-    "Authorization": habitualaUserData.accessToken
-  }
-}
-
 const state = {
   milestones: {},
   userTasks: [],
@@ -23,6 +14,16 @@ const getters = {
 const actions = {
   createTask({}, task) {
     return new Promise((resolve, reject) => {
+      
+      let habitualaUserData = ""
+      let options = {}
+      if (_.storage.get("habitualaUserData")) {
+        habitualaUserData = _.decryptObject(_.storage.get("habitualaUserData"))
+        options.headers = {
+          "Authorization": habitualaUserData.accessToken
+        }
+      }
+
       let body = {
         query: `
           mutation {
@@ -58,7 +59,14 @@ const actions = {
   },
   addMilestone({}, milestone) {
     return new Promise((resolve, reject) => {
-      
+      let habitualaUserData = ""
+      let options = {}
+      if (_.storage.get("habitualaUserData")) {
+        habitualaUserData = _.decryptObject(_.storage.get("habitualaUserData"))
+        options.headers = {
+          "Authorization": habitualaUserData.accessToken
+        }
+      }
       let body = {
         query: `
           mutation {
@@ -90,6 +98,14 @@ const actions = {
   },
   deleteMilestone({}, milestoneID) {
     return new Promise((resolve, reject) => {
+      let habitualaUserData = ""
+      let options = {}
+      if (_.storage.get("habitualaUserData")) {
+        habitualaUserData = _.decryptObject(_.storage.get("habitualaUserData"))
+        options.headers = {
+          "Authorization": habitualaUserData.accessToken
+        }
+      }
       let body = {
         query: `
           mutation {
@@ -112,6 +128,14 @@ const actions = {
   },
   editMilestone({}, milestone) {
     return new Promise((resolve, reject) => {
+      let habitualaUserData = ""
+      let options = {}
+      if (_.storage.get("habitualaUserData")) {
+        habitualaUserData = _.decryptObject(_.storage.get("habitualaUserData"))
+        options.headers = {
+          "Authorization": habitualaUserData.accessToken
+        }
+      }
       let body = {
         query: `
           mutation {
@@ -154,6 +178,14 @@ const actions = {
   },
   deleteTask({}, deleteTask) {
     return new Promise((resolve, reject) => {
+      let habitualaUserData = ""
+      let options = {}
+      if (_.storage.get("habitualaUserData")) {
+        habitualaUserData = _.decryptObject(_.storage.get("habitualaUserData"))
+        options.headers = {
+          "Authorization": habitualaUserData.accessToken
+        }
+      }
       let body = {
         query: `
           mutation {
@@ -177,6 +209,14 @@ const actions = {
   },
   updateTask({}, task) {
     return new Promise((resolve, reject) => {
+      let habitualaUserData = ""
+      let options = {}
+      if (_.storage.get("habitualaUserData")) {
+        habitualaUserData = _.decryptObject(_.storage.get("habitualaUserData"))
+        options.headers = {
+          "Authorization": habitualaUserData.accessToken
+        }
+      }
       let body = {
         query: `
           mutation {
@@ -212,6 +252,14 @@ const actions = {
   },
   fetchMilestones({commit}) {
     return new Promise((resolve, reject) => {
+      let habitualaUserData = ""
+      let options = {}
+      if (_.storage.get("habitualaUserData")) {
+        habitualaUserData = _.decryptObject(_.storage.get("habitualaUserData"))
+        options.headers = {
+          "Authorization": habitualaUserData.accessToken
+        }
+      }
       let body = {
         query: `
           query {

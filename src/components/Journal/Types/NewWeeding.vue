@@ -4,7 +4,7 @@
       @submit.prevent="submitForm"
     >
       <div class="row">
-        <div class="col-6 q-pa-lg">
+        <div class="col-12 col-md-6 q-pa-sm">
           <q-input 
             color="dark" 
             v-model="weedingJournal.problem" 
@@ -23,7 +23,7 @@
             </template>
           </q-input>
         </div>
-        <div class="col-6 q-pa-lg">
+        <div class="col-12 col-md-6 q-pa-sm">
           <q-input 
             color="purple-12" 
             v-model="weedingJournal.date" 
@@ -41,7 +41,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-6 q-pa-lg">
+        <div class="col-12 col-md-6 q-pa-sm">
           <q-input 
             color="purple-12"
             square
@@ -54,7 +54,7 @@
             :rules="[val => !!val || 'needs an entry']"
           />
         </div>
-        <div class="col-6 q-pa-lg">
+        <div class="col-12 col-md-6 q-pa-sm">
           <q-input 
             color="purple-12"
             square
@@ -69,7 +69,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col q-pa-lg">
+        <div class="col q-pa-sm">
           <q-input 
             color="purple-12" 
             v-model="weedingJournal.entry" 
@@ -91,7 +91,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col q-pa-lg">
+        <div class="col q-pa-sm">
           <q-btn 
             color="green-10" 
             label="Save"
@@ -125,7 +125,7 @@ export default {
     }
   }),
   methods: {
-    ...mapActions("journal", ["addNewWeedingJournal"]),
+    ...mapActions("journal", ["addNewJournal"]),
     closeThisDialog() {
       this.$emit("closeDialog")
     },
@@ -148,8 +148,9 @@ export default {
         entry: this.weedingJournal.entry,
       }
 
-      this.addNewWeedingJournal(newJournal)
+      this.addNewJournal(newJournal)
       .then(response => {
+        this.$root.$emit("newJournalAdded", newJournal.type)
         this.closeThisDialog()
       })
       .catch(err => {
